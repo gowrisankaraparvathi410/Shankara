@@ -3,29 +3,30 @@
 # ==============================================================
 
 import os
-import sys
-import subprocess
+#import sys
+#import subprocess
 
 # ---------- Auto-install required packages ----------
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+#def install(package):
+    #subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-required_packages = [
-    "streamlit", "opencv-python-headless", "easyocr", "numpy",
-    "scikit-image", "deepface", "retinaface", "pandas",
-    "tensorflow==2.15.0", "keras==2.15.0", "tf-keras", "requests"
-]
+#required_packages = [
+    #"streamlit", "opencv-python-headless", "easyocr", "numpy",
+    #"scikit-image", "deepface", "retinaface", "pandas",
+    #"tensorflow==2.15.0", "keras==2.15.0", "tf-keras", "requests"
+#]
 
-for pkg in required_packages:
-    try:
-        _import_(pkg)
-    except ImportError:
-        install(pkg)
+#for pkg in required_packages:
+   # try:
+        #_import_(pkg)
+    #except ImportError:
+        #install(pkg)
 
 # ---------- Imports after installation ----------
 import streamlit as st
 import cv2
 import numpy as np
+from PIL import Image
 import easyocr
 from skimage.metrics import structural_similarity as ssim
 from deepface import DeepFace
@@ -91,7 +92,7 @@ elif option == "AI-based KYC":
                 result = DeepFace.verify(img1, img2, enforce_detection=False)
                 similarity = 1 - result["distance"]
 
-                st.write(f"Similarity Score: *{similarity:.2f}*")
+                st.write(f"Similarity Score: {similarity:.2f}")
                 if similarity > 0.75:
                     st.success("✅ Face match successful! KYC verified.")
                 else:
@@ -120,7 +121,7 @@ elif option == "Document Tampering":
         score, diff = ssim(gray1, gray2, full=True)
         diff = (diff * 255).astype("uint8")
 
-        st.write(f"Similarity Score: *{score:.2f}*")
+        st.write(f"Similarity Score: {score:.2f}")
 
         if score < 0.85:
             st.error("⚠ Possible tampering detected between the documents.")
@@ -164,7 +165,7 @@ elif option == "Signature Verification":
 
             result_img = cv2.drawMatches(sig1, kp1, sig2, kp2, matches[:20], None, flags=2)
             st.image(result_img, caption="Feature Matching", use_container_width=True)
-            st.write(f"Match Score: *{score}*")
+            st.write(f"Match Score: {score}")
 
             if score > 50:
                 st.success("✅ Signatures match (Genuine)")
